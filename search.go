@@ -7,23 +7,40 @@ import (
 	"sync"
 )
 
-func search(target string, rootdir string, wg *sync.WaitGroup, results chan string) {
+func search(target string, rootdir string, ignoreCase bool, wg *sync.WaitGroup, results chan string) {
 	defer wg.Done()
 
+	searchTarget := target
+	if ignoreCase {
+		searchTarget = strings.ToLower(target)
+	}
+
+	//Read directory
 	dir, err := os.ReadDir(rootdir)
 	if err != nil {
 		return
 	}
 
+	//Scan directory
 	for _, item := range dir {
 
-		if strings.Contains(item.Name(), target) {
-			results <- filepath.Join(rootdir, item.Name())
+		itemName := item.Name()
+
+		isMatch := false
+		if ignoreCase {
+			isMatch = strings.Contains(strings.ToLower(itemName), searchTarget)
+		} else {
+			isMatch = strings.Contains(itemName, target)
 		}
 
+		if isMatch {
+			results <- filepath.Join(rootdir, itemName)
+		}
+
+		//Rerun for directories
 		if item.IsDir() {
 			wg.Add(1)
-			go search(target, filepath.Join(rootdir, item.Name()), wg, results)
+			go search(target, filepath.Join(rootdir, itemName), ignoreCase, wg, results)
 		}
 
 	}
