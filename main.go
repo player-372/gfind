@@ -12,6 +12,7 @@ func main() {
 	ignoreCase := flag.Bool("ignore-case", false, "Ignore case")
 	hidden := flag.Bool("hidden", false, "Search hidden items")
 	itemType := flag.String("type", "", "Search for files (f) or directories (d)? Don't use flag for both")
+	maxDepth := flag.Int("max-depth", 0, "Max depth, 0 for infinite")
 	flag.Parse()
 	target := flag.Args()
 
@@ -28,7 +29,7 @@ func main() {
 		var wg sync.WaitGroup
 
 		wg.Add(1)
-		go search(target[0], *rootdir, *ignoreCase, *hidden, *itemType, &wg, results)
+		go search(target[0], *rootdir, *ignoreCase, *hidden, *itemType, *maxDepth, 1, &wg, results)
 
 		//Getting results
 		go func() {
