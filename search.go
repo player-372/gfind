@@ -7,13 +7,16 @@ import (
 	"sync"
 )
 
-func search(target string, rootdir string, ignoreCase bool, hidden bool, itemType string, maxDepth int, currentDepth int, wg *sync.WaitGroup, results chan string) {
+func search(target string, rootdir string, ignoreCase bool, hidden bool, itemType string, maxDepth int, currentDepth int, wg *sync.WaitGroup, results chan string, sem chan struct{}) {
 	defer wg.Done()
+	defer func() { <-sem }()
 
 	searchTarget := target
 	if ignoreCase {
 		searchTarget = strings.ToLower(target)
 	}
+
+	sem <- struct{}{}
 
 	//Read directory
 	dir, err := os.ReadDir(rootdir)
@@ -27,6 +30,10 @@ func search(target string, rootdir string, ignoreCase bool, hidden bool, itemTyp
 		itemName := item.Name()
 
 		if !hidden && strings.HasPrefix(itemName, ".") {
+			continue
+		}
+
+		if item.Type()&os.ModeSymlink != 0 {
 			continue
 		}
 
@@ -58,7 +65,7 @@ func search(target string, rootdir string, ignoreCase bool, hidden bool, itemTyp
 
 			if item.IsDir() {
 				wg.Add(1)
-				go search(target, filepath.Join(rootdir, itemName), ignoreCase, hidden, itemType, maxDepth, currentDepth+1, wg, results)
+				go search(target, filepath.Join(rootdir, itemName), ignoreCase, hidden, itemType, maxDepth, currentDepth+1, wg, results, sem)
 			}
 
 		}
