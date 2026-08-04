@@ -11,8 +11,14 @@ func main() {
 	rootdir := flag.String("rootdir", ".", "Root direcotry")
 	ignoreCase := flag.Bool("ignore-case", false, "Ignore case")
 	hidden := flag.Bool("hidden", false, "Search hidden items")
+	itemType := flag.String("type", "", "Search for files (f) or directories (d)? Don't use flag for both")
 	flag.Parse()
 	target := flag.Args()
+
+	if *itemType != "" && *itemType != "f" && *itemType != "d" {
+		fmt.Println("Error: --type must be 'f' or 'd'")
+		return
+	}
 
 	if len(flag.Args()) != 1 {
 		fmt.Println("Error: rerun with one argument")
@@ -22,7 +28,7 @@ func main() {
 		var wg sync.WaitGroup
 
 		wg.Add(1)
-		go search(target[0], *rootdir, *ignoreCase, *hidden, &wg, results)
+		go search(target[0], *rootdir, *ignoreCase, *hidden, *itemType, &wg, results)
 
 		//Getting results
 		go func() {

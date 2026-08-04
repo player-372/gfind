@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-func search(target string, rootdir string, ignoreCase bool, hidden bool, wg *sync.WaitGroup, results chan string) {
+func search(target string, rootdir string, ignoreCase bool, hidden bool, itemType string, wg *sync.WaitGroup, results chan string) {
 	defer wg.Done()
 
 	searchTarget := target
@@ -38,13 +38,25 @@ func search(target string, rootdir string, ignoreCase bool, hidden bool, wg *syn
 		}
 
 		if isMatch {
-			results <- filepath.Join(rootdir, itemName)
+			switch {
+			default:
+
+			case itemType == "d" && item.IsDir():
+				results <- filepath.Join(rootdir, itemName)
+
+			case itemType == "f" && !item.IsDir():
+				results <- filepath.Join(rootdir, itemName)
+
+			case itemType == "":
+				results <- filepath.Join(rootdir, itemName)
+
+			}
 		}
 
 		//Rerun for directories
 		if item.IsDir() {
 			wg.Add(1)
-			go search(target, filepath.Join(rootdir, itemName), ignoreCase, hidden, wg, results)
+			go search(target, filepath.Join(rootdir, itemName), ignoreCase, hidden, itemType, wg, results)
 		}
 
 	}
