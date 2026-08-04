@@ -10,6 +10,7 @@ func main() {
 
 	rootdir := flag.String("rootdir", ".", "Root direcotry")
 	ignoreCase := flag.Bool("ignore-case", false, "Ignore case")
+	hidden := flag.Bool("hidden", false, "Search hidden items")
 	flag.Parse()
 	target := flag.Args()
 
@@ -21,7 +22,7 @@ func main() {
 		var wg sync.WaitGroup
 
 		wg.Add(1)
-		go search(target[0], *rootdir, *ignoreCase, &wg, results)
+		go search(target[0], *rootdir, *ignoreCase, *hidden, &wg, results)
 
 		//Getting results
 		go func() {
