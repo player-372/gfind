@@ -1,5 +1,36 @@
 package main
 
-func main(){
-	
+import (
+	"flag"
+	"fmt"
+	"sync"
+)
+
+func main() {
+
+	rootdir := flag.String("rootdir", ".", "Root direcotry")
+	flag.Parse()
+	target := flag.Args()
+
+	if len(flag.Args()) != 1 {
+		fmt.Println("Error: rerun with one argument")
+	} else {
+
+		results := make(chan string)
+		var wg sync.WaitGroup
+
+		wg.Add(1)
+		go search(target[0], *rootdir, &wg, results)
+
+		//Getting results
+		go func() {
+			wg.Wait()
+			close(results)
+		}()
+
+		for item := range results {
+			fmt.Println(item)
+		}
+
+	}
 }
