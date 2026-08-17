@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	rootdir := flag.String("root-dir", ".", "Directory to start search from")
+	rootdir := flag.String("root-dir", ".", "Directory to start the search from")
 	ignoreCase := flag.Bool("ignore-case", false, "Search case-insensitively (e.g. 'Main' matches 'main')")
 	hidden := flag.Bool("hidden", false, "Include hidden files and directories")
 	itemType := flag.String("type", "", "Filter by type: 'f' for files only, 'd' for directories only")
