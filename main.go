@@ -9,12 +9,12 @@ import (
 
 func main() {
 
-	rootdir := flag.String("rootdir", ".", "Root direcotry")
-	ignoreCase := flag.Bool("ignore-case", false, "Ignore case")
-	hidden := flag.Bool("hidden", false, "Search hidden items")
-	itemType := flag.String("type", "", "Search for files (f) or directories (d)? Don't use flag for both")
-	maxDepth := flag.Int("max-depth", 0, "Max depth, 0 for infinite")
-	threads := flag.Int("threads", runtime.NumCPU()/2, "Max amount of goruntines.")
+	rootdir := flag.String("rootdir", ".", "Directory to start search from")
+	ignoreCase := flag.Bool("ignore-case", false, "Search case-insensitively (e.g. 'Main' matches 'main')")
+	hidden := flag.Bool("hidden", false, "Include hidden files and directories")
+	itemType := flag.String("type", "", "Filter by type: 'f' for files only, 'd' for directories only")
+	maxDepth := flag.Int("max-depth", 0, "Maximum search depth (0 = unlimited)")
+	threads := flag.Int("threads", runtime.NumCPU()/2, "Number of concurrent search workers")
 	flag.Parse()
 	target := flag.Args()
 
