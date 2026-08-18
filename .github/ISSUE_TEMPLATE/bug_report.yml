@@ -33,6 +33,7 @@ body:
         Copy and paste any errors from the terminal here. If there aren't any errors, you can leave it empty.
   - type: checkboxes
     attributes:
+      label: Additional
       options:
         - label: I use the latest version of gfind
           required: true

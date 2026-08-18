@@ -19,5 +19,6 @@ body:
       placeholder: Explain the use case or problem this solves
   - type: checkboxes
     attributes:
+      label: Additional
       options:
         - label: I am willing to work on this myself
