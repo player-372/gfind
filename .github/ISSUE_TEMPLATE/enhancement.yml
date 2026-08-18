@@ -1,0 +1,23 @@
+name: Enhancement
+title: "[Enhancement] "
+description: Suggest an enhancement (feature request, changing README, etc.)
+assignees: player-372
+labels: enhancement
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for opening an issue!
+  - type: textarea
+    attributes:
+      label: What do you want to be added or changed
+      placeholder: Describe your idea clearly
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Why is this needed?
+      placeholder: Explain the use case or problem this solves
+  - type: checkboxes
+    attributes:
+      options:
+        - label: I am willing to work on this myself

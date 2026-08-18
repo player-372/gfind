@@ -1,0 +1,40 @@
+name: Bug report
+title: "[Bug] "
+description: Report a bug
+assignees: player-372
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for opening an issue!
+  - type: input
+    attributes:
+      label: Which OS / Linux distribution do you use?
+      placeholder: e.g. Ubuntu 24.04 LTS
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Which installation method did you use?
+      options:
+        - Via go install
+        - Manual installation
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Terminal log output
+      description: |
+        Copy and paste any errors from the terminal here. If there aren't any errors, you can leave it empty.
+  - type: checkboxes
+    attributes:
+      options:
+        - label: I use the latest version of gfind
+          required: true
+        - label: I am willing to work on this myself
+        - label: I can help with testing or providing additional information
